@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Household Budget & Expense Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="top-nav">
+    <div class="nav-title">Household Budget & Expense Management</div>
+    <div class="nav-right">
+      <button class="logout-btn">Log out</button>
+      <div class="profile-badge">2</div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="dashboard-container">
+    
+    <!-- Title Section -->
+    <h1 class="main-heading">Your month, at a glance.</h1>
+    <p class="subtitle">September 2026</p>
+
+    <!-- Month Selector -->
+    <div class="form-group">
+      <label for="month-select" class="field-label">Month</label>
+      <div class="select-wrapper">
+        <select id="month-select">
+          <option value="2026-09" selected>September 2026</option>
+          <option value="2026-08">August 2026</option>
+          <option value="2026-07">July 2026</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn btn-secondary">Set budget</button>
+      <button class="btn btn-primary">+ Add expense</button>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="cards-wrapper">
+      
+      <!-- Monthly Budget Card -->
+      <div class="summary-card light-card">
+        <span class="card-label">Monthly budget</span>
+        <span class="card-value bold-text">Not set</span>
+      </div>
+
+      <!-- Spent This Month Card -->
+      <div class="summary-card light-card">
+        <span class="card-label">Spent this month</span>
+        <span class="card-value">৳0</span>
+      </div>
+
+      <!-- Remaining Balance Card -->
+      <div class="summary-card dark-card">
+        <span class="card-label">Remaining balance</span>
+        <span class="card-value dash-indicator">—</span>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
