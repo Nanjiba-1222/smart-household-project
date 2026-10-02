@@ -1,74 +1,199 @@
-let priceTracker = [];
-// Handle price tracker form submission
+// CLEAN TEXT
+function normalizeText(text) {
+  return String(text || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, ' ');
+}
+// HANDLE PRICE FORM SUBMISSION
 function handleAddPrice(event) {
   event.preventDefault();
-  const product = document.getElementById('product').value.trim().toLowerCase();
-  const unit = document.getElementById('unit').value.trim().toLowerCase();
-  const market = document.getElementById('market').value.trim().toLowerCase();
-  const currentPrice = parseFloat(document.getElementById('currentPrice').value) || 0;
-  const existingIndex = priceTracker.findIndex(
-    item => item.product === product && item.unit === unit && item.market === market
+  const product = normalizeText(
+  document.getElementById('product').value
   );
-  if (existingIndex > -1) {
+  const unit = normalizeText(
+    document.getElementById('unit').value
+  );
+  const market = normalizeText(
+    document.getElementById('market').value
+  );
+  const currentPrice = parseFloat(
+    document.getElementById('currentPrice').value
+  );
+  // Validation
+  if (
+    !product ||
+    !unit ||
+    !market ||
+    isNaN(currentPrice) ||
+    currentPrice <= 0
+  ) {
+    alert('Please enter valid product information.');
+    return;
+  }
+  const existingIndex = priceTracker.findIndex(
+    item =>
+      normalizeText(item.product) === product &&
+      normalizeText(item.unit) === unit
+  );
+  // EXISTING PRODUCT
+  if (existingIndex !== -1) {
     const existingItem = priceTracker[existingIndex];
-    existingItem.previousPrice = existingItem.currentPrice;
-    existingItem.currentPrice = currentPrice;
-  } else {
+    // Old current price becomes previous price
+    existingItem.previousPrice =
+      Number(existingItem.currentPrice);
+    // New price becomes current price
+    existingItem.currentPrice =
+      currentPrice;
+    // Latest market name update
+    existingItem.market =
+      market;
+    existingItem.updatedAt =
+      new Date().toISOString();
+    priceTracker[existingIndex] =
+      existingItem;
+  }
+  // NEW PRODUCT
+  else {
     priceTracker.push({
       id: Date.now(),
-      product,
-      unit,
-      market,
-      previousPrice: currentPrice,
-      currentPrice
+      product: product,
+      unit: unit,
+      market: market,
+      // First time = no previous price
+      previousPrice: null,
+      currentPrice: currentPrice,
+      createdAt:
+        new Date().toISOString()
     });
   }
   // Save to LocalStorage
-  localStorage.setItem('hb_priceTracker', JSON.stringify(priceTracker));
+  localStorage.setItem(
+    'hb_priceTracker',
+    JSON.stringify(priceTracker)
+  );
+  // Refresh table
   renderPriceTracker();
-  document.getElementById('priceForm').reset();
+  // Reset form
+  document
+    .getElementById('priceForm')
+    .reset();
   alert('Product price record saved!');
 }
-// Render Price Tracker table with Up/Down change indicator
+// RENDER PRICE TRACKER
 function renderPriceTracker() {
-  const tbody = document.getElementById('tracker-table-body');
+  const tbody =
+    document.getElementById(
+      'tracker-table-body'
+    );
   if (!tbody) return;
+
   tbody.innerHTML = '';
+  // No data
   if (priceTracker.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #6b7280;">No price records added yet.</td></tr>`;
+    tbody.innerHTML = `
+      <tr>
+        <td
+     colspan="5"
+     style="
+     text-align:center;
+     color:#6b7280;
+    padding:25px;
+   "
+  >
+   No price records added yet.
+   </td>
+   </tr>
+    `;
     return;
   }
   priceTracker.forEach(item => {
-    const diff = item.currentPrice - item.previousPrice;
-    let changeText = 'No Change';
-    let changeClass = '';
-    if (diff > 0) {
-      changeText = `+৳ ${diff.toFixed(2)} (Up)`;
-      changeClass = 'price-up';
-    } else if (diff < 0) {
-      changeText = `-৳ ${Math.abs(diff).toFixed(2)} (Down)`;
-      changeClass = 'price-down';
+    const currentPrice =
+      Number(item.currentPrice);
+    let previousPrice =
+      item.previousPrice;
+    // PREVIOUS PRICE
+    let previousText = '—';
+    if (
+      previousPrice !== null &&
+      previousPrice !== undefined &&
+      previousPrice !== ''
+    ) {
+      previousPrice =
+        Number(previousPrice);
+      previousText =
+        `৳ ${previousPrice.toFixed(2)}`;
     }
-    const row = document.createElement('tr');
+    // CHANGE
+    let changeText = '—';
+    let changeClass = '';
+    if (previousPrice !== null) {
+     const diff =
+     currentPrice -
+     previousPrice;
+      // PRICE INCREASED
+      if (diff > 0) {
+       changeText =
+       `+৳ ${diff.toFixed(2)} (Up)`;
+        changeClass =
+       'price-up';
+      }
+      // PRICE DECREASED
+      else if (diff < 0) {
+        changeText =
+      `-৳ ${Math.abs(diff).toFixed(2)} (Down)`;
+        changeClass =
+       'price-down';
+      }
+      // SAME PRICE
+      else {
+        changeText =
+          'No Change';
+      }
+    }
+    // CREATE ROW
+    const row =
+      document.createElement('tr');
     row.innerHTML = `
-      <td style="text-transform: capitalize;">${item.product} (${item.unit})</td>
-      <td style="text-transform: capitalize;">${item.market}</td>
-      <td>৳ ${item.previousPrice.toFixed(2)}</td>
-      <td>৳ ${item.currentPrice.toFixed(2)}</td>
-      <td class="${changeClass}">${changeText}</td>
+    <td style="text-transform: capitalize;">
+    <strong>
+      ${item.product}
+       </strong>
+       <br>
+       <small>
+       ${item.unit}
+       </small>
+      </td>
+      <td style="text-transform: capitalize;">
+     ${item.market}
+      </td>
+      <td>
+       ${previousText}
+      </td>
+      <td>
+        ৳ ${currentPrice.toFixed(2)}
+      </td>
+      <td class="${changeClass}">
+        ${changeText}
+      </td>
     `;
     tbody.appendChild(row);
   });
 }
-// Load saved data when page loads
-document.addEventListener('DOMContentLoaded', () => {
-  const savedBudget = localStorage.getItem('hb_budget');
-  const savedExpenses = localStorage.getItem('hb_expenses');
-  const savedPriceTracker = localStorage.getItem('hb_priceTracker');
-  if (savedBudget) budget = JSON.parse(savedBudget);
-  if (savedExpenses) expenses = JSON.parse(savedExpenses);
-  if (savedPriceTracker) priceTracker = JSON.parse(savedPriceTracker);
-  renderDashboard();
-  renderExpenses();
-  renderPriceTracker();
-});
+// LOAD SAVED PRICE DATA
+document.addEventListener(
+  'DOMContentLoaded',
+  function () {
+    const savedPriceTracker =
+     localStorage.getItem(
+    'hb_priceTracker'
+      );
+    if (savedPriceTracker) {
+      priceTracker =
+       JSON.parse(
+      savedPriceTracker
+        );
+    }
+    renderPriceTracker();
+  }
+);let priceTracker = [];
