@@ -1,196 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HomeBudget - Household Budget & Expense Management</title>
+ <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>HomeBudget - Household Budget & Expense Management</title>
+
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link
+   rel="stylesheet"
+   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
 </head>
 <body>
-
   <div class="app-container">
-    <!-- Sidebar Navigation -->
     <aside class="sidebar">
       <div>
-        <div class="brand">
-          <i class="fa-solid fa-coins logo-icon"></i>
-          <h2>HomeBudget</h2>
-        </div>
-
-        <div class="menu-section">
-          <p class="section-title">YOUR HOUSEHOLD</p>
-          <ul class="nav-links">
-            <li id="nav-dashboard" class="active"><a href="#" onclick="switchTab('dashboard')"><i class="fa-solid fa-border-all"></i> Dashboard</a></li>
-            <li id="nav-set-budget"><a href="#" onclick="switchTab('set-budget')"><i class="fa-regular fa-calendar-check"></i> Set budget</a></li>
-            <li id="nav-add-expense"><a href="#" onclick="switchTab('add-expense')"><i class="fa-solid fa-plus"></i> Add expense</a></li>
-            <li id="nav-expense-history"><a href="#" onclick="switchTab('expense-history')"><i class="fa-solid fa-bars-staggered"></i> Expense history</a></li>
-            <li id="nav-price-tracker"><a href="#" onclick="switchTab('price-tracker')"><i class="fa-solid fa-chart-line"></i> Price tracker</a></li>
-          </ul>
-        </div>
+    <div class="brand">
+   <i class="fa-solid fa-coins logo-icon"></i>
+   <h2>HomeBudget</h2>
+     </div>
+  <div class="menu-section">
+   <p class="section-title">YOUR HOUSEHOLD</p>
+   <ul class="nav-links">
+  <li id="nav-dashboard" class="active">
+   <a href="#" onclick="switchTab('dashboard'); return false;">
+   <i class="fa-solid fa-border-all"></i>
+       Dashboard
+       </a>
+      </li>
+       <li id="nav-set-budget">
+       <a href="#" onclick="switchTab('set-budget'); return false;">
+       <i class="fa-regular fa-calendar-check"></i>
+        Set budget
+              </a>
+            </li>
+            <li id="nav-add-expense">
+     <a href="#" onclick="switchTab('add-expense'); return false;">
+      <i class="fa-solid fa-plus"></i>
+      Add expense
+              </a>
+            </li>
+            <li id="nav-expense-history">
+             <a href="#" onclick="switchTab('expense-history'); return false;">
+             <i class="fa-solid fa-bars-staggered"></i>
+             Expense history
+              </a>
+            </li>
+            <li id="nav-price-tracker">
+              <a href="#" onclick="switchTab('price-tracker'); return false;">
+               <i class="fa-solid fa-chart-line"></i>
+                Price tracker
+              </a>
+     </li>
+      </ul>
+     </div>
       </div>
-
       <div class="user-profile">
-        <p class="profile-title">Your household</p>
-        <p class="profile-email" id="userEmail">nanjiba fairoj</p>
-        <button class="logout-btn" onclick="logout()">Log out</button>
-      </div>
+        <p class="profile-title">
+          Your household
+        </p>
+        <p class="profile-email" id="userEmail">
+        </p>
+        <button class="logout-btn" onclick="logout()">
+          Log out
+    </button>
+     </div>
     </aside>
-
-    <!-- Main Content Area -->
     <main class="main-content">
       <header class="top-header">
-        <p>Household Budget & Expense Management</p>
+     <p>
+     Household Budget & Expense Management
+     </p>
       </header>
-
-      <!-- 1. DASHBOARD SECTION -->
       <section id="section-dashboard" class="content-section">
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Budget, spent and left at a glance.</p>
-        
+        <h1 class="page-title">
+         Dashboard
+        </h1>
+        <p class="page-subtitle">
+          Budget, spent and left at a glance.
+        </p>
+        <div class="form-group" style="max-width: 240px; margin-bottom: 25px;">
+          <label for="dashboardMonth">
+          </label>
+          <input
+            type="month"
+            id="dashboardMonth"
+            onchange="handleMonthChange()"
+          >
+        </div>
+        <p
+          id="monthMessage"
+          style="
+        margin-bottom: 20px;
+         color: #64748b;
+         font-size: 14px;
+          "
+        >
+        </p>
         <div class="stats-grid">
-          <div class="card">
-            <h3>Monthly Budget</h3>
-            <p class="amount" id="dash-budget">৳ 0.00</p>
+         <div class="card">
+         <h3>Monthly Budget</h3>
+         <p class="amount" id="dash-budget">
+              ৳ 0.00
+           </p>
           </div>
           <div class="card">
-            <h3>Total Spent</h3>
-            <p class="amount spent" id="dash-spent">৳ 0.00</p>
+          <h3>Total Spent</h3>
+            <p class="amount spent" id="dash-spent">
+              ৳ 0.00
+           </p>
           </div>
           <div class="card">
             <h3>Remaining Balance</h3>
-            <p class="amount balance" id="dash-balance">৳ 0.00</p>
+            <p class="amount balance" id="dash-balance">
+              ৳ 0.00
+          </p>
           </div>
         </div>
       </section>
-
-      <!-- 2. SET BUDGET SECTION -->
-      <section id="section-set-budget" class="content-section" style="display: none;">
-        <h1 class="page-title">Set Monthly Budget</h1>
-        <p class="page-subtitle">One figure that guides the month.</p>
-        
-        <form class="form-container" onsubmit="handleSetBudget(event)">
+      <section
+        id="section-set-budget"
+        class="content-section"
+        style="display: none;"
+      >
+        <h1 class="page-title">
+          Set Monthly Budget
+        </h1>
+        <p class="page-subtitle">
+          One figure that guides the month.
+        </p>
+        <form
+          class="form-container"
+          onsubmit="handleSetBudget(event)"
+        >
           <div class="form-group">
-            <label for="monthlyBudget">Monthly Budget (৳)</label>
-            <input type="number" id="monthlyBudget" placeholder="e.g. 35000" required>
+            <label for="budgetMonth">
+              Month
+            </label>
+            <input
+              type="month"
+              id="budgetMonth"
+              required
+            >
           </div>
-          <button type="submit" class="submit-btn">Update Budget</button>
+          <div class="form-group">
+            <label for="monthlyBudget">
+              Monthly Budget (৳)
+            </label>
+            <input
+              type="number"
+              id="monthlyBudget"
+              placeholder="e.g. 35000"
+              min="1"
+              step="0.01"
+              required
+            >
+          </div>
+          <button
+            type="submit"
+            class="submit-btn"
+          >
+            Update Budget
+          </button>
         </form>
       </section>
-
-      <!-- 3. ADD EXPENSE SECTION -->
-      <section id="section-add-expense" class="content-section" style="display: none;">
-        <h1 class="page-title">Add Expense</h1>
-        <p class="page-subtitle">Amount, category, date, note.</p>
-        
-        <form class="form-container" onsubmit="handleAddExpense(event)">
+      <section
+        id="section-add-expense"
+        class="content-section"
+        style="display: none;"
+      >
+        <h1 class="page-title">
+          Add Expense
+        </h1>
+        <p class="page-subtitle">
+          Amount, category, date, note.
+        </p>
+        <form
+          class="form-container"
+          onsubmit="handleAddExpense(event)"
+        >
           <div class="form-row">
             <div class="form-group">
-              <label for="expCategory">Category</label>
+              <label for="expCategory">
+                Category
+              </label>
               <select id="expCategory" required>
-                <option value="Groceries">Groceries</option>
-                <option value="Utilities">Utilities</option>
-                <option value="Transport">Transport</option>
-                <option value="Education">Education</option>
-                <option value="Other">Other</option>
+                <option value="Groceries">
+                  Groceries
+                </option>
+                <option value="Utilities">
+                  Utilities
+                </option>
+                <option value="Transport">
+                  Transport
+                </option>
+                <option value="Education">
+                  Education
+                </option>
+                <option value="Other">
+                  Other
+                </option>
               </select>
             </div>
             <div class="form-group">
-              <label for="expAmount">Amount (৳)</label>
-              <input type="number" step="0.01" id="expAmount" placeholder="e.g. 1250" required>
+              <label for="expAmount">
+                Amount (৳)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                min="0.01"
+                id="expAmount"
+                placeholder="e.g. 1250"
+                required
+              >
             </div>
           </div>
-
           <div class="form-group">
-            <label for="expDate">Date</label>
-            <input type="date" id="expDate" required>
+          <label for="expDate">
+            Date
+            </label>
+            <input
+          type="date"
+           id="expDate"
+           required
+            >
           </div>
-
           <div class="form-group">
-            <label for="expNote">Note (Optional)</label>
-            <input type="text" id="expNote" placeholder="e.g. Weekly bazar">
+            <label for="expNote">
+              Note (Optional)
+            </label>
+            <input
+              type="text"
+              id="expNote"
+              placeholder="e.g. Weekly bazar"
+            >
           </div>
-
-          <button type="submit" class="submit-btn">Add Expense</button>
+          <button
+            type="submit"
+            class="submit-btn"
+          >
+       Add Expense
+      </button>
         </form>
       </section>
-
-      <!-- 4. EXPENSE HISTORY SECTION -->
-      <section id="section-expense-history" class="content-section" style="display: none;">
-        <h1 class="page-title">Expense History</h1>
-        <p class="page-subtitle">Every record, listed by date.</p>
-
+      <section
+        id="section-expense-history"
+        class="content-section"
+        style="display: none;"
+      >
+        <h1 class="page-title">
+          Expense History
+        </h1>
+        <p class="page-subtitle">
+          Every record, listed by date.
+        </p>
+        <div
+          class="form-group"
+          style="max-width: 240px; margin-bottom: 25px;"
+        >
+          <label for="historyMonth">
+            Select Month
+          </label>
+          <input
+            type="month"
+            id="historyMonth"
+            onchange="renderExpenseHistory()"
+          >
+        </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>DATE</th>
-                <th>CATEGORY</th>
-                <th>NOTE</th>
-                <th>AMOUNT</th>
+           <th>DATE</th>
+          <th>CATEGORY</th>
+          <th>NOTE</th>
+          <th>AMOUNT</th>
               </tr>
+
             </thead>
-            <tbody id="expense-table-body">
-              <!-- Dynamically populated -->
-            </tbody>
+
+         <tbody id="expense-table-body">
+        </tbody>
           </table>
         </div>
       </section>
-
-      <!-- 5. PRICE TRACKER SECTION -->
-      <section id="section-price-tracker" class="content-section" style="display: none;">
-        <h1 class="page-title">Add product price</h1>
-        <p class="page-subtitle">Record the price you saw at the market.</p>
-
-        <form id="priceForm" class="form-container" onsubmit="handleAddPrice(event)">
+      <section
+        id="section-price-tracker"
+        class="content-section"
+        style="display: none;"
+      >
+        <h1 class="page-title">
+          Add product price
+        </h1>
+        <p class="page-subtitle">
+          Record the price you saw at the market.
+        </p>
+        <form
+          id="priceForm"
+          class="form-container"
+          onsubmit="handleAddPrice(event)"
+        >
           <div class="form-row">
             <div class="form-group">
-              <label for="product">Product</label>
-              <input type="text" id="product" placeholder="rice" required>
+              <label for="product">
+                Product
+              </label>
+              <input
+                type="text"
+                id="product"
+                placeholder="rice"
+                required
+              >
             </div>
             <div class="form-group">
-              <label for="unit">Unit</label>
-              <input type="text" id="unit" placeholder="per kg" required>
+              <label for="unit">
+                Unit
+              </label>
+              <input
+                type="text"
+                id="unit"
+                placeholder="per kg"
+                required
+              >
             </div>
           </div>
-
           <div class="form-group">
-            <label for="market">Market</label>
-            <input type="text" id="market" placeholder="new market" required>
+            <label for="market">
+              Market
+            </label>
+            <input
+              type="text"
+              id="market"
+              placeholder="new market"
+              required
+            >
           </div>
-
           <div class="form-group">
-            <label for="currentPrice">Current price (৳)</label>
-            <input type="number" step="0.01" id="currentPrice" placeholder="0.01" required>
+            <label for="currentPrice">
+              Current price (৳)
+            </label>
+            <input
+              type="number"
+              step="0.01"
+              min="0.01"
+              id="currentPrice"
+              placeholder="0.01"
+              required
+            >
           </div>
-
-          <p class="form-note">For an existing product, use the same unit and market. Its current price will be updated.</p>
-
-          <button type="submit" class="submit-btn">Save Product Price</button>
-        </form>
-
-        <h2 style="margin-top: 40px; margin-bottom: 15px; font-size: 20px;">Price Tracker List</h2>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>PRODUCT</th>
-                <th>MARKET</th>
-                <th>PREVIOUS</th>
-                <th>CURRENT</th>
-                <th>CHANGE</th>
-              </tr>
-            </thead>
-            <tbody id="tracker-table-body">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-    </main>
+          <p class="form-note">
+    For an existing product, use the same unit and market.
+     Its current price will be updated.
+          </p>
+          <button
+    type="submit"
+   class="submit-btn"
+    >
+   Save Product Price
+  </button>
+    </form>
+ <h2
+   style="
+   margin-top: 40px;
+   margin-bottom: 15px;
+   font-size: 20px;
+          "
+        >
+ Price Tracker List
+    </h2>
+   <div class="table-container">
+   <table>
+   <thead>
+     <tr>
+     <th>PRODUCT</th>
+   <th>MARKET</th>
+   <th>PREVIOUS</th>
+   <th>CURRENT</th>
+   <th>CHANGE</th>
+     </tr>
+  </thead>
+  <tbody id="tracker-table-body">
+ </tbody>
+  </table>
   </div>
-
+ </section>
+ </main>
+  </div>
+  <script>
+   const today = new Date();
+   const currentMonth =
+   today.getFullYear() + "-" +   String(today.getMonth() + 1).padStart(2, "0");
+    document.getElementById("dashboardMonth").max = currentMonth;
+    document.getElementById("budgetMonth").max = currentMonth;  document.getElementById("historyMonth").max = currentMonth;
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
